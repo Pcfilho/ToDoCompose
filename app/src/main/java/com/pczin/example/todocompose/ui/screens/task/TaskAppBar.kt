@@ -6,9 +6,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.pczin.example.todocompose.components.DisplayAlertDialog
 import com.pczin.example.todocompose.data.models.Priority
 import com.pczin.example.todocompose.data.models.ToDoTask
 import com.pczin.example.todocompose.ui.theme.topAppBarBackgroundColor
@@ -50,6 +51,26 @@ fun NewTaskAppBar(
 
         }
     )
+}
+
+@Composable
+fun ExistingTaskAppBarAction(
+    selectedTask: ToDoTask,
+    navigateToListScreen: (Action) -> Unit
+){
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = "Remove '${selectedTask.title}'?",
+        message = "Are you sure you wante to remove '${selectedTask.title}'?",
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = { navigateToListScreen(Action.DELETE)}
+    )
+    DeleteAction(onDeleteClicked = {
+        openDialog = true
+    })
+    UpdateAction(onUpdateClicked = navigateToListScreen)
 }
 
 @Composable
@@ -95,8 +116,10 @@ fun ExistingTaskAppBar(
         },
         backgroundColor = MaterialTheme.colors.topAppBarBackgroundColor,
         actions = {
-            DeleteAction(onDeleteClicked = navigateToListScreen)
-            UpdateAction(onUpdateClicked = navigateToListScreen)
+            ExistingTaskAppBarAction(
+                selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen
+            )
         }
     )
 }
@@ -116,10 +139,10 @@ fun CloseAction(
 
 @Composable
 fun DeleteAction(
-    onDeleteClicked: (Action) -> Unit
+    onDeleteClicked: () -> Unit
 ){
     IconButton(onClick = {
-        onDeleteClicked(Action.DELETE)
+        onDeleteClicked()
     }) {
         Icon(imageVector = Icons.Filled.Delete,
             contentDescription = "Delete Icon",
