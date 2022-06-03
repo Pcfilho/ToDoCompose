@@ -1,10 +1,14 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.pczin.example.todocompose.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.pczin.example.todocompose.navigation.destinations.listComposable
 import com.pczin.example.todocompose.navigation.destinations.splashComposable
 import com.pczin.example.todocompose.navigation.destinations.taskComposable
@@ -21,7 +25,7 @@ fun SetupNavtigation(
         Screens(navController = navController)
     }
 
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
         startDestination = SPLASH_SCREEN
     ) {

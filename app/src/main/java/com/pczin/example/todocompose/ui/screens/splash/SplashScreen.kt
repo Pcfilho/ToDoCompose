@@ -28,9 +28,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(
     navigateToListScreen: () -> Unit
 ){
-    val startAnimation by remember {
-        mutableStateOf(false)
-    }
+    var startAnimation by remember { mutableStateOf(false) }
     
     val offsetState by animateDpAsState(
         targetValue = if (startAnimation) 0.dp else 100.dp,
@@ -48,6 +46,7 @@ fun SplashScreen(
 
 
     LaunchedEffect(key1 = true) {
+        startAnimation = true
         delay(SPLASH_SCREEN_DELAY)
         navigateToListScreen()
     }
